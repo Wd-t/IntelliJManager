@@ -8,3 +8,5 @@
 - Ide所在目录,也就是bin的上级目录
 - `-cp`(`-cachepath`)
 - 需和 `-cp` 命令一起使用,是Ide缓存所在目录
+
+##### 注意本程序比较依赖JetBrains Toolbox,使用前需安装

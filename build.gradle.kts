@@ -33,7 +33,7 @@ dependencies {
     implementation("com.alibaba.fastjson2:fastjson2:2.0.34")
     implementation("commons-io:commons-io:2.13.0")
     testImplementation(platform("org.junit:junit-bom:5.9.3"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
 }
 
 tasks.test {
