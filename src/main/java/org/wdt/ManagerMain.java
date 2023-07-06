@@ -13,7 +13,7 @@ public class ManagerMain {
         if (!Toolbox.exists()) {
             throw new IOException("Toolbox is not installed!");
         }
-        CommandLineParser commandLineParser = new BasicParser();
+        CommandLineParser commandLineParser = new DefaultParser();
         CreateStartupScript script = new CreateStartupScript(options);
         CopyVmoptions copyVmoptions = new CopyVmoptions(options);
         JetBrainsIDEList GetList = new JetBrainsIDEList(options);

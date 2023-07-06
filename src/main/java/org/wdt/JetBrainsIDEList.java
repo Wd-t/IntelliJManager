@@ -7,7 +7,6 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 public class JetBrainsIDEList {
 
@@ -18,28 +17,16 @@ public class JetBrainsIDEList {
 
     public void GetJetBrainsIDEList() {
         try {
-            File IDEAppPath = new File(GetToolboxSetting.GetJetBrainsIDEInstallPath() + "\\apps");
-            if (Objects.nonNull(IDEAppPath.listFiles())) {
-                for (File file : Objects.requireNonNull(IDEAppPath.listFiles())) {
-                    if (file.isDirectory() && !file.getName().equals("Toolbox")) {
-                        if (Objects.nonNull(file.listFiles())) {
-                            for (File channelid : Objects.requireNonNull(file.listFiles())) {
-                                File HistroyFile = new File(channelid + "\\.history.json");
-                                JSONObject HistoryJSONObject = JSONObject.parseObject(FileUtils.readFileToString(HistroyFile, "UTF-8"));
-                                JSONObject ItemJSONObject = HistoryJSONObject.getJSONArray("history")
-                                        .getJSONObject(HistoryJSONObject.getJSONArray("history").size() - 1).getJSONObject("item");
-                                System.out.println("IDE Name:" + ItemJSONObject.getString("name") + "," +
-                                        "IDE Version:" + ItemJSONObject.getString("version") + "," +
-                                        "IDE Build:" + ItemJSONObject.getString("build"));
-                            }
-                        } else {
-                            break;
-                        }
-                    }
+
+            for (File file : GetIDEDirList.IdeDirList()) {
+                if (file.isDirectory() && !file.getName().equals("scripts") && !file.getName().equals("download")) {
+                    File ProductInfoFile = new File(file.getCanonicalPath() + "\\product-info.json");
+                    JSONObject ProductInfoFileJson = JSONObject.parseObject(FileUtils.readFileToString(ProductInfoFile, "UTF-8"));
+                    System.out.println("IDE Name : " + ProductInfoFileJson.getString("name") + ",Version : " + ProductInfoFileJson.getString("version")
+                            + ",BuildNumber : " + ProductInfoFileJson.getString("buildNumber"));
                 }
-            } else {
-                System.out.println("warning:No IDE version available");
             }
+
         } catch (IOException | NullPointerException e) {
             throw new RuntimeException(e);
         }

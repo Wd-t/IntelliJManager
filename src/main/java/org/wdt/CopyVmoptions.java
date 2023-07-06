@@ -1,5 +1,6 @@
 package org.wdt;
 
+import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
@@ -12,7 +13,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.regex.Pattern;
 
 import static java.util.Objects.requireNonNull;
 
@@ -31,19 +31,18 @@ public class CopyVmoptions {
             File CacheAddress = new File(commandLine.getOptionValue("cp"));
             Files.createDirectories(Path.of(CacheAddress.getCanonicalPath()));
             if (IdeBinPath.isDirectory() && IdeBinPath.exists()) {
-                for (File child : requireNonNull(IdeBinPath.listFiles())) {
-                    if (Pattern.compile("\\.exe\\.vmoptions").matcher(child.getName()).find()) {
-                        String Vmoptions = IOUtils.toString(requireNonNull(getClass().getResourceAsStream("/idea.vmoptions")), StandardCharsets.UTF_8)
-                                .replace(":CacheAddress", FilenameUtils.separatorsToWindows(CacheAddress.getCanonicalPath()));
-                        FileUtils.writeStringToFile(child, Vmoptions, "UTF-8");
-                        System.out.println("Copy File To: " + child);
-                    } else {
-                        System.out.println("The " + child.getName() + " is not a vmoptions file");
-                    }
-                }
+                File ProductInfoFile = new File(IdeBinPath.getCanonicalPath() + "\\product-info.json");
+                JSONObject ProductInfoFileJson = JSONObject.parseObject(FileUtils.readFileToString(ProductInfoFile, "UTF-8"));
+                JSONObject LaunchFirstJson = ProductInfoFileJson.getJSONArray("launch").getJSONObject(0);
+                File child = new File(FilenameUtils.separatorsToWindows(IdeBinPath.getCanonicalPath() + "\\" + LaunchFirstJson.getString("vmOptionsFilePath")));
+                String Vmoptions = IOUtils.toString(requireNonNull(getClass().getResourceAsStream("/idea.vmoptions")), StandardCharsets.UTF_8)
+                        .replace(":CacheAddress", FilenameUtils.separatorsToWindows(CacheAddress.getCanonicalPath()));
+                FileUtils.writeStringToFile(child, Vmoptions, "UTF-8");
+                System.out.println("Copy File To: " + child);
             } else {
-                throw new IOException("The ide bin address does not exist");
+                throw new IOException("IDE path must is a directory");
             }
+
         } else {
             throw new IOException("Must have -cp parameter");
         }
