@@ -27,11 +27,11 @@ public class CopyVmoptions {
 
     public void CopyVmoptionsFile(CommandLine commandLine) throws IOException {
         if (commandLine.hasOption("cp")) {
-            File IdeBinPath = new File(commandLine.getOptionValue("ip") + "\\bin");
+            File IdeBinPath = new File(commandLine.getOptionValue("ip"));
             File CacheAddress = new File(commandLine.getOptionValue("cp"));
             Files.createDirectories(Path.of(CacheAddress.getCanonicalPath()));
             if (IdeBinPath.isDirectory() && IdeBinPath.exists()) {
-                File ProductInfoFile = new File(IdeBinPath.getCanonicalPath() + "\\product-info.json");
+                File ProductInfoFile = new File(IdeBinPath + "\\product-info.json");
                 JSONObject ProductInfoFileJson = JSONObject.parseObject(FileUtils.readFileToString(ProductInfoFile, "UTF-8"));
                 JSONObject LaunchFirstJson = ProductInfoFileJson.getJSONArray("launch").getJSONObject(0);
                 File child = new File(FilenameUtils.separatorsToWindows(IdeBinPath.getCanonicalPath() + "\\" + LaunchFirstJson.getString("vmOptionsFilePath")));
