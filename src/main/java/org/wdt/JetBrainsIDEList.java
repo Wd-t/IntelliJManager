@@ -19,11 +19,13 @@ public class JetBrainsIDEList {
         try {
 
             for (File file : GetIDEDirList.IdeDirList()) {
-                if (file.isDirectory() && !file.getName().equals("scripts") && !file.getName().equals("download")) {
+                if (file.isDirectory()) {
                     File ProductInfoFile = new File(file.getCanonicalPath() + "\\product-info.json");
-                    JSONObject ProductInfoFileJson = JSONObject.parseObject(FileUtils.readFileToString(ProductInfoFile, "UTF-8"));
-                    System.out.println("IDE Name : " + ProductInfoFileJson.getString("name") + ",Version : " + ProductInfoFileJson.getString("version")
-                            + ",BuildNumber : " + ProductInfoFileJson.getString("buildNumber"));
+                    if (ProductInfoFile.exists()) {
+                        JSONObject ProductInfoFileJson = JSONObject.parseObject(FileUtils.readFileToString(ProductInfoFile, "UTF-8"));
+                        System.out.println("IDE Name : " + ProductInfoFileJson.getString("name") + ",Version : " + ProductInfoFileJson.getString("version")
+                                + ",BuildNumber : " + ProductInfoFileJson.getString("buildNumber"));
+                    }
                 }
             }
 

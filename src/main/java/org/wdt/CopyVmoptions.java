@@ -28,7 +28,8 @@ public class CopyVmoptions {
     public void CopyVmoptionsFile(CommandLine commandLine) throws IOException {
         if (commandLine.hasOption("cp")) {
             File IdeBinPath = new File(commandLine.getOptionValue("ip"));
-            File CacheAddress = new File(commandLine.getOptionValue("cp"));
+            String CacheAddressPath = commandLine.getOptionValue("cp");
+            File CacheAddress = new File(CacheAddressPath);
             Files.createDirectories(Path.of(CacheAddress.getCanonicalPath()));
             if (IdeBinPath.isDirectory() && IdeBinPath.exists()) {
                 File ProductInfoFile = new File(IdeBinPath + "\\product-info.json");
@@ -36,7 +37,7 @@ public class CopyVmoptions {
                 JSONObject LaunchFirstJson = ProductInfoFileJson.getJSONArray("launch").getJSONObject(0);
                 File child = new File(FilenameUtils.separatorsToWindows(IdeBinPath.getCanonicalPath() + "\\" + LaunchFirstJson.getString("vmOptionsFilePath")));
                 String Vmoptions = IOUtils.toString(requireNonNull(getClass().getResourceAsStream("/idea.vmoptions")), StandardCharsets.UTF_8)
-                        .replace(":CacheAddress", FilenameUtils.separatorsToWindows(CacheAddress.getCanonicalPath()));
+                        .replace(":CacheAddress", FilenameUtils.separatorsToWindows(CacheAddressPath));
                 FileUtils.writeStringToFile(child, Vmoptions, "UTF-8");
                 System.out.println("Copy File To: " + child);
             } else {
