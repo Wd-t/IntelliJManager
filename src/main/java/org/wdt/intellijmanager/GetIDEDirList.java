@@ -1,4 +1,4 @@
-package org.wdt;
+package org.wdt.intellijmanager;
 
 import java.io.File;
 import java.io.IOException;

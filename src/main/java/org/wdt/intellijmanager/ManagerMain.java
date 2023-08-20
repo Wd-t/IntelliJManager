@@ -1,4 +1,4 @@
-package org.wdt;
+package org.wdt.intellijmanager;
 
 import org.apache.commons.cli.*;
 
@@ -17,6 +17,7 @@ public class ManagerMain {
         CreateStartupScript script = new CreateStartupScript(options);
         CopyVmoptions copyVmoptions = new CopyVmoptions(options);
         JetBrainsIDEList GetList = new JetBrainsIDEList(options);
+        VersionInfo info = new VersionInfo(options);
         CommandLine commandLine = commandLineParser.parse(options, args);
         if (commandLine.hasOption("ip")) {
             copyVmoptions.CopyVmoptionsFile(commandLine);
@@ -26,6 +27,9 @@ public class ManagerMain {
         }
         if (commandLine.hasOption("s")) {
             script.CreateScript(commandLine);
+        }
+        if (commandLine.hasOption("v")) {
+            info.getVersionInfo();
         }
     }
 
