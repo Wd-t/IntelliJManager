@@ -21,12 +21,20 @@ tasks.jar {
 }
 tasks.withType<ShadowJar> {
     manifest.attributes.apply {
-        put("Main-Class", "org.wdt.ManagerMain")
+        put("Main-Class", "org.wdt.intellijmanager.ManagerMain")
     }
 }
 tasks.processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
+
+tasks.create<JavaExec>("run") {
+    dependsOn(tasks.shadowJar)
+    group = "application"
+    classpath = files(tasks.shadowJar.get().archiveFile.get().asFile)
+    args = listOf("-v")
+}
+
 dependencies {
     // https://mvnrepository.com/artifact/commons-cli/commons-cli
     implementation("commons-cli:commons-cli:1.5.0")
