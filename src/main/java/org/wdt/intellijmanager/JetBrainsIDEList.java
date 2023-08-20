@@ -1,4 +1,4 @@
-package org.wdt;
+package org.wdt.intellijmanager;
 
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.cli.Option;
@@ -12,7 +12,7 @@ import java.util.Objects;
 public class JetBrainsIDEList {
 
     public JetBrainsIDEList(Options options) {
-        Option option = Option.builder("l").longOpt("list").hasArgs().required(false).desc("choose ide").build();
+        Option option = Option.builder("l").longOpt("list").hasArg(false).required(false).desc("choose ide").build();
         options.addOption(option);
     }
 

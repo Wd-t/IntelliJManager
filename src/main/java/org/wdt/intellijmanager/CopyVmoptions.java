@@ -1,4 +1,4 @@
-package org.wdt;
+package org.wdt.intellijmanager;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;

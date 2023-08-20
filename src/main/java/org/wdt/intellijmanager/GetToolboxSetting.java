@@ -1,4 +1,4 @@
-package org.wdt;
+package org.wdt.intellijmanager;
 
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;

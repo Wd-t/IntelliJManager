@@ -1,6 +1,6 @@
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
-import org.wdt.GetToolboxSetting;
+import org.wdt.intellijmanager.GetToolboxSetting;
 
 import java.io.File;
 import java.io.IOException;

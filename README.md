@@ -1,7 +1,9 @@
 # 命令列表
 
+- `-v`(`-version`)
+- 无参数,显示此程序的版本和toolbox版本
 - `-l`(`-list`)
-- 显示计算机上所有已安装的JetBrains Ide
+- 无参数,显示计算机上所有已安装的JetBrains IDE
 - `-s`(`-script`)
 - 复制启动脚本到指定位置
 - `-ip`(`-idepath`)
