@@ -14,6 +14,7 @@ public class ManagerMain {
             throw new IOException("Toolbox is not installed!");
         }
         CommandLineParser commandLineParser = new DefaultParser();
+        SavedConfigFile configFile = new SavedConfigFile(options);
         CreateStartupScript script = new CreateStartupScript(options);
         CopyVmoptions copyVmoptions = new CopyVmoptions(options);
         JetBrainsIDEList GetList = new JetBrainsIDEList(options);
@@ -21,6 +22,8 @@ public class ManagerMain {
         CommandLine commandLine = commandLineParser.parse(options, args);
         if (commandLine.hasOption("ip")) {
             copyVmoptions.CopyVmoptionsFile(commandLine);
+        } else if (commandLine.hasOption("sf")) {
+            configFile.CopyFile(commandLine);
         }
         if (commandLine.hasOption("l")) {
             GetList.GetJetBrainsIDEList();

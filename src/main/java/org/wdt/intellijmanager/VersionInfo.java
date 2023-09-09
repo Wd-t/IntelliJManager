@@ -15,7 +15,7 @@ public class VersionInfo {
     }
 
     public void getVersionInfo() throws IOException {
-        System.out.println("Application Version: 2.2.1");
+        System.out.println("Application Version: 2.3.0");
         File file = new File(System.getProperty("user.home") + "\\AppData\\Local\\JetBrains\\Toolbox\\state.json");
         System.out.println("Toolbox Version: " + JSONObject.parseObject(FileUtils.readFileToString(file, "UTF-8")).getString("appVersion"));
     }

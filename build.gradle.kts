@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "org.wdt"
-version = "1.0"
+version = "2.3.0"
 
 repositories {
     maven { url = uri("https://maven.aliyun.com/repository/public/") }
