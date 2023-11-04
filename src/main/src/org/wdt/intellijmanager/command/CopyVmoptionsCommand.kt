@@ -2,7 +2,7 @@ package org.wdt.intellijmanager.command
 
 import org.apache.commons.cli.CommandLine
 import org.apache.commons.cli.Option
-import org.apache.commons.cli.Options
+import org.wdt.intellijmanager.objects.ConfigObject
 import org.wdt.intellijmanager.utils.OptionUtils
 import org.wdt.utils.gson.JsonUtils
 import org.wdt.utils.gson.getString
@@ -11,35 +11,26 @@ import java.io.File
 import java.io.IOException
 import java.util.*
 
-class CopyVmoptionsCommand(options: Options) {
-    init {
-        options.addOption(toolsPathCommandOption)
-        options.addOption(toolsCachePathCommandOption)
-    }
+class CopyVmoptionsCommand {
 
     @Throws(IOException::class)
     fun copyVmoptionsFile(commandLine: CommandLine) {
-
         if (commandLine.hasOption(toolsCachePathCommandOption)) {
-            if (commandLine.hasOption(SaveConfigFileCommand.getSaveFileOption())) {
-                copyVmoptionsFile(
-                    commandLine.getOptionValue(toolsPathCommandOption),
-                    commandLine.getOptionValue(toolsCachePathCommandOption),
-                    File(commandLine.getOptionValue(SaveConfigFileCommand.getSaveFileOption()))
-                )
-            } else {
-                copyVmoptionsFile(
-                    commandLine.getOptionValue(toolsPathCommandOption), commandLine.getOptionValue(
-                        toolsCachePathCommandOption
-                    ), null
-                )
-            }
+            val copyVmoptionsTask = CopyVmoptionsTask(
+                commandLine.getOptionValue(toolsPathCommandOption),
+                commandLine.getOptionValue(toolsCachePathCommandOption),
+                if (commandLine.hasOption(SaveConfigFileCommand.saveFileOption))
+                    File(commandLine.getOptionValue(SaveConfigFileCommand.saveFileOption))
+                else null
+            )
+            copyVmoptionsTask.notConfig = commandLine.hasOption(notCofnigOption)
+            copyVmoptionsTask.copyVmoptionsFile()
         } else {
             throw IOException("Must have -cp parameter")
         }
     }
-
     companion object {
+
         @JvmStatic
         val toolsPathCommandOption: Option = OptionUtils.getOption("ip", "idepath", true)
 
@@ -47,28 +38,39 @@ class CopyVmoptionsCommand(options: Options) {
         val toolsCachePathCommandOption: Option = OptionUtils.getOption("cp", "cachepath", true)
 
         @JvmStatic
-        @Throws(IOException::class)
-        fun copyVmoptionsFile(ip: String, cp: String, saveFile: File?) {
-            val ideBinPath = File(ip)
-            val cacheAddress = File(cp)
-            cacheAddress.createDirectories()
-            if (ideBinPath.isDirectory() && ideBinPath.exists()) {
-                val productInfoFile = File(ideBinPath, "product-info.json")
-                val productInfoFileJson = JsonUtils.getJSONObject(productInfoFile)
-                val launchFirstJson = productInfoFileJson.getAsJsonArray("launch").get(0).asJsonObject
-                val child = File(ideBinPath.getCanonicalFile(), launchFirstJson.getString("vmOptionsFilePath"))
-                val vmoptions = IOUtils.toString(
-                    Objects.requireNonNull(
-                        CopyVmoptionsCommand::class.java.getResourceAsStream("/idea.vmoptions")
-                    )
-                ).replace(":CacheAddress", FilenameUtils.separatorsToWindows(cp))
-                child.writeStringToFile(vmoptions)
-                println("Copy File To: $child")
-                saveFile?.writeStringToFile("$ip\n$cp")
-            } else {
-                throw IOException("IDE path must is a directory")
-            }
-        }
-
+        val notCofnigOption: Option = OptionUtils.getOption("nc", "notconfig", false)
     }
+}
+
+class CopyVmoptionsTask(private var ip: String?, private var cp: String?, private var saveFile: File?) {
+    var notConfig: Boolean = false
+
+    @Throws(IOException::class)
+    fun copyVmoptionsFile() {
+        val config = if (notConfig) null else ConfigObject.getCofnig()
+        if (config != null) println(config)
+        val configAddress = if (config == null) cp!! else config.ideConfigSameDirectory!!.canonicalPath
+        val pluginsAddress = if (config == null) cp!! else config.idePluginsSameDirectory!!.canonicalPath
+        val ideBinPath = File(ip!!)
+        val cacheAddress = File(cp!!)
+        cacheAddress.createDirectories()
+        if (ideBinPath.isDirectory() && ideBinPath.isFileExists()) {
+            val productInfoFile = File(ideBinPath, "product-info.json")
+            val productInfoFileJson = JsonUtils.getJsonObject(productInfoFile)
+            val launchFirstJson = productInfoFileJson.getAsJsonArray("launch").get(0).asJsonObject
+            val child = File(ideBinPath.getCanonicalFile(), launchFirstJson.getString("vmOptionsFilePath"))
+            val vmoptions = IOUtils.toString(
+                Objects.requireNonNull(
+                    CopyVmoptionsCommand::class.java.getResourceAsStream("/idea.vmoptions")
+                )
+            ).replace(":CacheAddress", FilenameUtils.separatorsToWindows(cp))
+                .replace(":ConfigAddress", configAddress).replace(":PluginsAddress", pluginsAddress)
+            child.writeStringToFile(vmoptions)
+            println("Copy File To: $child")
+            saveFile?.writeStringToFile("$ip\n$cp")
+        } else {
+            throw IOException("IDE path must is a directory")
+        }
+    }
+
 }

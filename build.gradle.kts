@@ -1,13 +1,14 @@
 plugins {
     java
     application
-    kotlin("jvm") version "1.9.10"
+    kotlin("jvm") version "1.9.0"
 }
 
-group = "org.wdt"
-version = "2.4.0"
+group = "org.wdt.intellijmanager"
+version = "2.5.0"
 
 repositories {
+    maven { url = uri("https://jitpack.io") }
     maven { url = uri("https://maven.aliyun.com/repository/public/") }
     mavenLocal()
     mavenCentral()
@@ -15,6 +16,7 @@ repositories {
 
 application {
     mainClass.set("org.wdt.intellijmanager.ManagerMain")
+    applicationDefaultJvmArgs = listOf("-Dintellijmanager.version.number=${project.version}")
 }
 
 sourceSets {
@@ -31,10 +33,10 @@ tasks.processResources {
 
 
 dependencies {
+    implementation("com.github.wd-t.utils:utils-io:v1.1.2.1")
+    implementation("com.github.wd-t.utils:utils-gson:v1.1.2.1")
     implementation("commons-cli:commons-cli:1.5.0")
     implementation("com.google.code.gson:gson:2.10.1")
-    implementation(files("./libs/utils-gson-1.1.0.jar"))
-    implementation(files("./libs/utils-io-1.1.0.jar"))
     testImplementation(platform("org.junit:junit-bom:5.9.3"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
     implementation(kotlin("stdlib"))

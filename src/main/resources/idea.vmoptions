@@ -23,6 +23,6 @@
 -XX:HeapDumpPath=:CacheAddress\java_error_in_idea.hprof
 -Dfile.encoding=UTF-8
 -Didea.system.path=:CacheAddress\system
--Didea.config.path=:CacheAddress\config
--Didea.plugins.path=:CacheAddress\plugins
+-Didea.config.path=:ConfigAddress\config
+-Didea.plugins.path=:PluginsAddress\plugins
 -Didea.log.path=:CacheAddress\system\log

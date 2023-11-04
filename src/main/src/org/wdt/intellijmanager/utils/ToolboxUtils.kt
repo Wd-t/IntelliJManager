@@ -17,7 +17,7 @@ object ToolboxUtils {
 
     @JvmStatic
     fun getToobloxSettingJsonObject(): JsonObject {
-        return JsonUtils.getJSONObject(getToolboxSettingJsonFile())
+        return JsonUtils.getJsonObject(getToolboxSettingJsonFile())
     }
 
     @JvmStatic
