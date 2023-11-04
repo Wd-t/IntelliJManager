@@ -4,8 +4,9 @@ import org.apache.commons.cli.CommandLine
 import org.apache.commons.cli.Option
 import org.wdt.intellijmanager.objects.ConfigObject
 import org.wdt.intellijmanager.utils.OptionUtils
-import org.wdt.utils.gson.JsonUtils
+import org.wdt.utils.gson.getJsonObject
 import org.wdt.utils.gson.getString
+import org.wdt.utils.gson.readFileToJsonObject
 import org.wdt.utils.io.*
 import java.io.File
 import java.io.IOException
@@ -20,7 +21,7 @@ class CopyVmoptionsCommand {
                 commandLine.getOptionValue(toolsPathCommandOption),
                 commandLine.getOptionValue(toolsCachePathCommandOption),
                 if (commandLine.hasOption(SaveConfigFileCommand.saveFileOption))
-                    File(commandLine.getOptionValue(SaveConfigFileCommand.saveFileOption))
+                    SaveConfigFileCommand.getSavdFilePath(commandLine.getOptionValue(SaveConfigFileCommand.saveFileOption))
                 else null
             )
             copyVmoptionsTask.notConfig = commandLine.hasOption(notCofnigOption)
@@ -55,9 +56,8 @@ class CopyVmoptionsTask(private var ip: String?, private var cp: String?, privat
         val cacheAddress = File(cp!!)
         cacheAddress.createDirectories()
         if (ideBinPath.isDirectory() && ideBinPath.isFileExists()) {
-            val productInfoFile = File(ideBinPath, "product-info.json")
-            val productInfoFileJson = JsonUtils.getJsonObject(productInfoFile)
-            val launchFirstJson = productInfoFileJson.getAsJsonArray("launch").get(0).asJsonObject
+            val launchFirstJson = File(ideBinPath, "product-info.json").readFileToJsonObject()
+                .getAsJsonArray("launch").getJsonObject(0)
             val child = File(ideBinPath.getCanonicalFile(), launchFirstJson.getString("vmOptionsFilePath"))
             val vmoptions = IOUtils.toString(
                 Objects.requireNonNull(

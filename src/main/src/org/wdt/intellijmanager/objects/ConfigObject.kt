@@ -2,8 +2,7 @@ package org.wdt.intellijmanager.objects
 
 import com.google.gson.annotations.SerializedName
 import org.wdt.intellijmanager.command.ConfigCommand
-import org.wdt.utils.gson.JsonObjectUtils
-import org.wdt.utils.gson.JsonUtils
+import org.wdt.utils.gson.readFileToClass
 import org.wdt.utils.io.isFileExists
 import java.io.File
 
@@ -21,7 +20,7 @@ class ConfigObject {
         @JvmStatic
         fun getCofnig(): ConfigObject? {
             return if (ConfigCommand.configFile.isFileExists())
-                JsonObjectUtils.parseObject(JsonUtils.getJsonObject(ConfigCommand.configFile), ConfigObject::class.java)
+                ConfigCommand.configFile.readFileToClass()
             else null
         }
     }

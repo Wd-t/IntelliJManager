@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "org.wdt.intellijmanager"
-version = "2.5.0"
+version = "2.5.1"
 
 repositories {
     maven { url = uri("https://jitpack.io") }
@@ -33,8 +33,8 @@ tasks.processResources {
 
 
 dependencies {
-    implementation("com.github.wd-t.utils:utils-io:v1.1.2.1")
-    implementation("com.github.wd-t.utils:utils-gson:v1.1.2.1")
+    implementation("com.github.wd-t.utils:utils-gson:1.2.0")
+    implementation("com.github.wd-t.utils:utils-io:1.2.0")
     implementation("commons-cli:commons-cli:1.5.0")
     implementation("com.google.code.gson:gson:2.10.1")
     testImplementation(platform("org.junit:junit-bom:5.9.3"))

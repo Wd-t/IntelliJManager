@@ -3,8 +3,8 @@ package org.wdt.intellijmanager.command
 import org.apache.commons.cli.Option
 import org.wdt.intellijmanager.utils.OptionUtils
 import org.wdt.intellijmanager.utils.ToolboxUtils
-import org.wdt.utils.gson.JsonUtils
 import org.wdt.utils.gson.getString
+import org.wdt.utils.gson.readFileToJsonObject
 
 class PrintVersionCommand {
     companion object {
@@ -17,8 +17,7 @@ class PrintVersionCommand {
     fun printVersionNumber() {
         println("Application Version: ${System.getProperty("intellijmanager.version.number")}")
         println(
-            "Toolbox Version: " + JsonUtils.getJsonObject(ToolboxUtils.getToobloxStateJsonFile())
-                .getString("appVersion")
+            "Toolbox Version: ${ToolboxUtils.getToobloxStateJsonFile().readFileToJsonObject().getString("appVersion")}"
         )
     }
 }

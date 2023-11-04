@@ -12,7 +12,7 @@ import java.io.File
 class ConfigCommand {
     fun startTask(commandLine: CommandLine) {
         if (configFile.isFileNotExists()) {
-            configFile.writeStringToFile(Json.gsonBuilder.serializeNulls().create().toJson(ConfigObject()))
+            configFile.writeStringToFile(Json.GSON_BUILDER.serializeNulls().create().toJson(ConfigObject()))
         }
         if (commandLine.hasOption(openConfigFileOption)) {
             Runtime.getRuntime().exec(arrayOf("cmd.exe", "/C", "start", configFile.canonicalPath))

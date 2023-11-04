@@ -4,14 +4,14 @@ import org.apache.commons.cli.Option
 import org.wdt.intellijmanager.objects.StateObject
 import org.wdt.intellijmanager.utils.OptionUtils.getOption
 import org.wdt.intellijmanager.utils.ToolboxUtils.getToobloxStateJsonFile
-import org.wdt.utils.gson.JsonUtils.readFileToClass
+import org.wdt.utils.gson.readFileToClass
 import org.wdt.utils.io.FileUtils
 import java.io.File
 import java.util.*
 
 class PrintJetBrainsToolsCommand {
     fun printJetBrainsTools() {
-        val stateObject = readFileToClass(getToobloxStateJsonFile(), StateObject::class.java)
+        val stateObject: StateObject = getToobloxStateJsonFile().readFileToClass()
         val toolsObjectList = stateObject.tools
         if (toolsObjectList.isNullOrEmpty()) {
             println("warning:No IDE version available")
@@ -24,7 +24,7 @@ class PrintJetBrainsToolsCommand {
 
     companion object {
         fun getJetBrainsToolsDirectorys(): List<File>? {
-            val stateObject = readFileToClass(getToobloxStateJsonFile(), StateObject::class.java)
+            val stateObject: StateObject = getToobloxStateJsonFile().readFileToClass()
             val toolsObjectList = stateObject.tools
             if (toolsObjectList.isNullOrEmpty()) {
                 println("warning:No IDE version available")
