@@ -25,11 +25,13 @@ class CopyVmoptionsCommand {
                 else null
             )
             copyVmoptionsTask.notConfig = commandLine.hasOption(notCofnigOption)
+            copyVmoptionsTask.openFile = commandLine.hasOption(ConfigCommand.openConfigFileOption)
             copyVmoptionsTask.copyVmoptionsFile()
         } else {
             throw IOException("Must have -cp parameter")
         }
     }
+
     companion object {
 
         @JvmStatic
@@ -43,17 +45,18 @@ class CopyVmoptionsCommand {
     }
 }
 
-class CopyVmoptionsTask(private var ip: String?, private var cp: String?, private var saveFile: File?) {
+class CopyVmoptionsTask(private var idePath: String, private var cachePath: String, private var saveFile: File?) {
     var notConfig: Boolean = false
+    var openFile: Boolean = false
 
     @Throws(IOException::class)
     fun copyVmoptionsFile() {
         val config = if (notConfig) null else ConfigObject.getCofnig()
         if (config != null) println(config)
-        val configAddress = if (config == null) cp!! else config.ideConfigSameDirectory!!.canonicalPath
-        val pluginsAddress = if (config == null) cp!! else config.idePluginsSameDirectory!!.canonicalPath
-        val ideBinPath = File(ip!!)
-        val cacheAddress = File(cp!!)
+        val configAddress = if (config == null) cachePath else config.ideConfigSameDirectory!!.canonicalPath
+        val pluginsAddress = if (config == null) cachePath else config.idePluginsSameDirectory!!.canonicalPath
+        val ideBinPath = File(idePath)
+        val cacheAddress = File(cachePath)
         cacheAddress.createDirectories()
         if (ideBinPath.isDirectory() && ideBinPath.isFileExists()) {
             val launchFirstJson = File(ideBinPath, "product-info.json").readFileToJsonObject()
@@ -63,11 +66,12 @@ class CopyVmoptionsTask(private var ip: String?, private var cp: String?, privat
                 Objects.requireNonNull(
                     CopyVmoptionsCommand::class.java.getResourceAsStream("/idea.vmoptions")
                 )
-            ).replace(":CacheAddress", FilenameUtils.separatorsToWindows(cp))
+            ).replace(":CacheAddress", FilenameUtils.separatorsToWindows(cachePath))
                 .replace(":ConfigAddress", configAddress).replace(":PluginsAddress", pluginsAddress)
             child.writeStringToFile(vmoptions)
             println("Copy File To: $child")
-            saveFile?.writeStringToFile("$ip\n$cp")
+            saveFile?.writeStringToFile("$idePath\n$cachePath")
+            if (openFile) OptionUtils.openFile(child)
         } else {
             throw IOException("IDE path must is a directory")
         }

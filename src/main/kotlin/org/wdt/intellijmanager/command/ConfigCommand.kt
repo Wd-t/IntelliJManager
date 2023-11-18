@@ -4,18 +4,17 @@ import org.apache.commons.cli.CommandLine
 import org.apache.commons.cli.Option
 import org.wdt.intellijmanager.objects.ConfigObject
 import org.wdt.intellijmanager.utils.OptionUtils
-import org.wdt.utils.gson.Json
+import org.wdt.utils.gson.writeObjectToFile
 import org.wdt.utils.io.isFileNotExists
-import org.wdt.utils.io.writeStringToFile
 import java.io.File
 
 class ConfigCommand {
     fun startTask(commandLine: CommandLine) {
         if (configFile.isFileNotExists()) {
-            configFile.writeStringToFile(Json.GSON_BUILDER.serializeNulls().create().toJson(ConfigObject()))
+			configFile.writeObjectToFile(ConfigObject())
         }
         if (commandLine.hasOption(openConfigFileOption)) {
-            Runtime.getRuntime().exec(arrayOf("cmd.exe", "/C", "start", configFile.canonicalPath))
+			OptionUtils.openFile(configFile)
         } else {
             println(ConfigObject.getCofnig())
         }

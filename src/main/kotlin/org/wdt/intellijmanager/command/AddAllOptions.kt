@@ -13,5 +13,6 @@ object AddAllOptions {
         options.addOption(PrintVersionCommand.getOption())
         options.addOption(PrintJetBrainsToolsCommand.option)
         options.addOption(SaveConfigFileCommand.saveFileOption)
+        options.addOption(SetToolsInstallPathCommand.setInstallOption)
     }
 }

@@ -2,7 +2,7 @@ package org.wdt.intellijmanager.command
 
 import org.apache.commons.cli.Option
 import org.wdt.intellijmanager.utils.OptionUtils
-import org.wdt.intellijmanager.utils.ToolboxUtils
+import org.wdt.intellijmanager.utils.ToolboxUtils.toobloxStateJsonFile
 import org.wdt.utils.gson.getString
 import org.wdt.utils.gson.readFileToJsonObject
 
@@ -17,7 +17,7 @@ class PrintVersionCommand {
     fun printVersionNumber() {
         println("Application Version: ${System.getProperty("intellijmanager.version.number")}")
         println(
-            "Toolbox Version: ${ToolboxUtils.getToobloxStateJsonFile().readFileToJsonObject().getString("appVersion")}"
+            "Toolbox Version: ${toobloxStateJsonFile.readFileToJsonObject().getString("appVersion")}"
         )
     }
 }
