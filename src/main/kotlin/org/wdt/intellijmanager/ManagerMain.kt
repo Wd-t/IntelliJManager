@@ -12,7 +12,7 @@ import org.wdt.intellijmanager.command.PrintVersionCommand.Companion.getOption
 import org.wdt.intellijmanager.command.SaveConfigFileCommand.Companion.saveFileOption
 import org.wdt.intellijmanager.command.SetToolsInstallPathCommand.setInstallOption
 import org.wdt.intellijmanager.utils.ToolboxUtils.toolboxInstallPath
-import org.wdt.utils.io.isFileExists
+import org.wdt.utils.io.isFileNotExists
 import java.io.IOException
 
 object ManagerMain {
@@ -21,7 +21,7 @@ object ManagerMain {
     @Throws(ParseException::class, IOException::class)
     @JvmStatic
     fun main(args: Array<String>) {
-        if (toolboxInstallPath.isFileExists()) {
+        if (toolboxInstallPath.isFileNotExists()) {
             throw IOException("Toolbox is not installed!")
         }
         val commandLineParser: CommandLineParser = DefaultParser()

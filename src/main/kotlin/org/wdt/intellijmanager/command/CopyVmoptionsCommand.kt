@@ -76,5 +76,4 @@ class CopyVmoptionsTask(private var idePath: String, private var cachePath: Stri
             throw IOException("IDE path must is a directory")
         }
     }
-
 }

@@ -1,7 +1,7 @@
 package org.wdt.intellijmanager.objects
 
 import com.google.gson.annotations.SerializedName
-import org.wdt.intellijmanager.command.ConfigCommand
+import org.wdt.intellijmanager.command.ConfigCommand.Companion.configFile
 import org.wdt.utils.gson.readFileToClass
 import org.wdt.utils.io.isFileExists
 import java.io.File
@@ -19,8 +19,8 @@ class ConfigObject {
     companion object {
         @JvmStatic
         fun getCofnig(): ConfigObject? {
-            return if (ConfigCommand.configFile.isFileExists())
-                ConfigCommand.configFile.readFileToClass()
+            return if (configFile.isFileExists())
+                configFile.readFileToClass()
             else null
         }
     }
