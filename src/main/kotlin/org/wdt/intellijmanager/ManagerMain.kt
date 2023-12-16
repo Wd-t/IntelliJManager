@@ -1,3 +1,5 @@
+@file:JvmName("ManagerMain")
+
 package org.wdt.intellijmanager
 
 import org.apache.commons.cli.CommandLineParser

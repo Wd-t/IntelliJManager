@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "org.wdt.intellijmanager"
-version = "2.6.2"
+version = "2.6.2.1"
 
 
 repositories {
