@@ -9,15 +9,16 @@ import java.io.File
 fun copyFile(commandLine: CommandLine) {
     val file = getSavdFilePath(commandLine.getOptionValue(saveFileOption))
     val line = file.readFileToLine()
-    val ip = line[0]
-    val cp = line[1]
-    val copyVmoptionsTask = CopyVmoptionsTask(ip, cp, file)
-    copyVmoptionsTask.notConfig = commandLine.hasOption(notCofnigOption)
-    copyVmoptionsTask.copyVmoptionsFile()
+    CopyVmoptionsManger(line[1], line[0]).apply {
+        saveFile = file
+        notConfig = commandLine.hasOption(notCofnigOption)
+    }.let {
+        CopyVmoptionsTask(it).run {
+            copyVmoptionsFile()
+        }
+    }
 }
 
 val saveFileOption: Option = getOption("sf", "savefile", true)
 
-fun getSavdFilePath(name: String): File {
-    return File(System.getProperty("user.home"), ".config/intellijmanager/$name")
-}
+fun getSavdFilePath(name: String): File = File(System.getProperty("user.home"), ".config/intellijmanager/$name")

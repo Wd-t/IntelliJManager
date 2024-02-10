@@ -11,13 +11,16 @@ import org.wdt.utils.io.isFileNotExists
 import java.io.File
 
 fun startTask(commandLine: CommandLine) {
-    if (configFile.isFileNotExists()) {
-        configFile.writeObjectToFile(ConfigObject())
-    }
-    if (commandLine.hasOption(openConfigFileOption)) {
-        openFile(configFile)
-    } else {
-        println(getCofnig())
+    configFile.run {
+        if (isFileNotExists()) {
+            writeObjectToFile(ConfigObject())
+        }
+        if (commandLine.hasOption(openConfigFileOption)) {
+            println("The configuration file needs to be manually edited")
+            openFile(this)
+        } else {
+            println(getCofnig())
+        }
     }
 }
 

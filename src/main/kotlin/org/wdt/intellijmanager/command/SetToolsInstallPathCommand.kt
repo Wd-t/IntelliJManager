@@ -10,11 +10,13 @@ import org.wdt.utils.io.createDirectories
 import java.io.File
 
 fun setInstallPath(command: CommandLine) {
-    val installPath = File(command.getOptionValue(setInstallOption))
-    installPath.createDirectories()
-    val settingObject = toolboxSettingJsonFile.readFileToJsonObject()
-    settingObject.addProperty("install_location", installPath.canonicalPath)
-    installPath.writeObjectToFile(settingObject, Json.GSON_BUILDER.setPrettyPrinting())
+    File(command.getOptionValue(setInstallOption)).run {
+        createDirectories()
+        toolboxSettingJsonFile.readFileToJsonObject().let {
+            it.addProperty("install_location", canonicalPath)
+            writeObjectToFile(it, Json.GSON_BUILDER.setPrettyPrinting())
+        }
+    }
 }
 
 val setInstallOption = getOption("i", "install", true)

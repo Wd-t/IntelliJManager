@@ -1,6 +1,8 @@
 package org.wdt.intellijmanager.objects
 
 import com.google.gson.annotations.SerializedName
+import org.wdt.intellijmanager.utils.toobloxStateJsonFile
+import org.wdt.utils.gson.readFileToClass
 
 class StateObject {
     @SerializedName("appVersion")
@@ -9,6 +11,8 @@ class StateObject {
     @SerializedName("tools")
     val tools: List<ToolsObject>? = null
 }
+
+val stateObject: StateObject = toobloxStateJsonFile.readFileToClass()
 
 class ToolsObject {
     @SerializedName("channelId")
